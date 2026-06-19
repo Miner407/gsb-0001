@@ -12,6 +12,8 @@ export default function MedicineForm({ onSubmit, initialData, submitLabel = '保
   const [stock, setStock] = useState(initialData?.stock ?? 0)
   const [expiryDate, setExpiryDate] = useState(initialData?.expiry_date || '')
   const [location, setLocation] = useState(initialData?.location || '')
+  const [contraindications, setContraindications] = useState(initialData?.contraindications || '')
+  const [allergyWarning, setAllergyWarning] = useState(initialData?.allergy_warning || '')
 
   useEffect(() => {
     if (initialData) {
@@ -20,16 +22,26 @@ export default function MedicineForm({ onSubmit, initialData, submitLabel = '保
       setStock(initialData.stock ?? 0)
       setExpiryDate(initialData.expiry_date || '')
       setLocation(initialData.location || '')
+      setContraindications(initialData.contraindications || '')
+      setAllergyWarning(initialData.allergy_warning || '')
     }
   }, [initialData])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    onSubmit({ name, symptoms, stock: Number(stock), expiry_date: expiryDate, location })
+    onSubmit({
+      name,
+      symptoms,
+      stock: Number(stock),
+      expiry_date: expiryDate,
+      location,
+      contraindications,
+      allergy_warning: allergyWarning,
+    })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5 max-h-[70vh] overflow-y-auto pr-1">
       <div>
         <label className="mb-1.5 block text-sm font-semibold text-slate-700">药品名称 *</label>
         <input
@@ -84,6 +96,26 @@ export default function MedicineForm({ onSubmit, initialData, submitLabel = '保
           required
           className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-800 shadow-sm transition-all focus:border-teal-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-400/20"
           placeholder="例如：客厅药箱"
+        />
+      </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-semibold text-slate-700">禁忌人群</label>
+        <textarea
+          value={contraindications}
+          onChange={e => setContraindications(e.target.value)}
+          rows={2}
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-800 shadow-sm transition-all focus:border-teal-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-400/20"
+          placeholder="例如：孕妇、儿童、胃溃疡患者禁用"
+        />
+      </div>
+      <div>
+        <label className="mb-1.5 block text-sm font-semibold text-slate-700">过敏提示</label>
+        <textarea
+          value={allergyWarning}
+          onChange={e => setAllergyWarning(e.target.value)}
+          rows={2}
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-slate-800 shadow-sm transition-all focus:border-teal-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-400/20"
+          placeholder="例如：青霉素过敏者禁用，过敏体质慎用"
         />
       </div>
       <button

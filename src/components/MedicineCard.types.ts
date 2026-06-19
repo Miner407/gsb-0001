@@ -5,6 +5,8 @@ interface Medicine {
   stock: number
   expiry_date: string
   location: string
+  contraindications: string
+  allergy_warning: string
   created_at: string
   updated_at: string
 }

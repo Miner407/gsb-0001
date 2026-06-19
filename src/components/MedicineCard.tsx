@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type Medicine from './MedicineCard.types'
 
 interface MedicineCardProps {
@@ -29,6 +30,7 @@ function getStockStatus(stock: number): { label: string; color: string } {
 
 export default function MedicineCard({ medicine, onEdit, onConsume, onRestock, onDelete }: MedicineCardProps) {
   const [showActions, setShowActions] = useState(false)
+  const navigate = useNavigate()
   const expiry = getExpiryStatus(medicine.expiry_date)
   const stockStatus = getStockStatus(medicine.stock)
 
@@ -38,7 +40,10 @@ export default function MedicineCard({ medicine, onEdit, onConsume, onRestock, o
 
       <div className="p-5 pl-5">
         <div className="mb-3 flex items-start justify-between">
-          <div className="flex-1">
+          <button
+            onClick={() => navigate(`/medicines/${medicine.id}`)}
+            className="flex-1 text-left transition-opacity hover:opacity-75"
+          >
             <h3 className="text-lg font-bold text-slate-800">{medicine.name}</h3>
             <div className="mt-1 flex flex-wrap gap-1.5">
               {medicine.symptoms.split(',').map((s: string, i: number) => (
@@ -47,7 +52,7 @@ export default function MedicineCard({ medicine, onEdit, onConsume, onRestock, o
                 </span>
               ))}
             </div>
-          </div>
+          </button>
           <span className={cn('ml-2 shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold', expiry.color)}>
             {expiry.label}
           </span>
@@ -70,6 +75,12 @@ export default function MedicineCard({ medicine, onEdit, onConsume, onRestock, o
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(`/medicines/${medicine.id}`)}
+            className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600 transition-all hover:bg-slate-100"
+          >
+            详情/计划
+          </button>
           <button
             onClick={() => onConsume(medicine.id)}
             disabled={medicine.stock <= 0}
